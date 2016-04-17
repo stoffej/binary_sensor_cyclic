@@ -37,7 +37,7 @@
 MySensor gw;
 Bounce debouncer = Bounce(); 
 int oldValue=-1;
-
+  int value = debouncer.read();
 // Change to V_LIGHT if you use S_LIGHT in presentation below
 MyMessage msg(CHILD_ID,V_TRIPPED);
 
@@ -58,19 +58,21 @@ void setup()
   // You can use S_DOOR, S_MOTION or S_LIGHT here depending on your usage. 
   // If S_LIGHT is used, remember to update variable type you send in. See "msg" above.
   gw.present(CHILD_ID, S_DOOR);  
+
+   debouncer.update();
+  // Get the update value
+
 }
 
 
 //  Check if digital input has changed and send in new value
 void loop() 
 {
-  debouncer.update();
-  // Get the update value
-  int value = debouncer.read();
+ 
  
  delay(2000); 
      // Send in the new value
      gw.send(msg.set(value==HIGH ? 1 : 0));
-     oldValue = !value;
+     value = !value;
   
 } 
